@@ -30,6 +30,9 @@ server.use(
 server.use('/api/suppliers', supplierRouter);
 server.use('/api/items', itemRouter);
 
+server.get('/', (req , res) => {
+    res.send("we are live");
+});
 
 // Initial test to see if server is working
 // server.get('/entrance', (req, res) => {
