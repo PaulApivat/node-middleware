@@ -3,9 +3,12 @@ const express = require('express');  //inside package.json dependencies
 const helmet = require('helmet'); 
 const logger = require('morgan');   
 
-const customMW = require('./custom_middleware')
-console.log('custom MW', customMW);
+// const customMW = require('./custom_middleware')
+// console.log('custom MW', customMW);
 //const db = require('./data/db')
+
+const supplierRouter = require('./supplier_router.js')
+const itemRouter = require('./item_router.js')
 
 const server = express();
 const PORT = 5050;
@@ -15,34 +18,27 @@ const PORT = 5050;
 // 2. third party library
 // 3. custom
 
-//server.use(express.json());  //most common use built in
-//server.use(helmet());        //third party library
-//server.use(logger('dev'));  //third party library
-
 // third party middlware
 server.use(
     express.json(),
     logger('dev'),
     helmet(),
-    customMW.gatekeeper
+    //customMW.gatekeeper    // custom middleware - logging in with a password; put in custom_middleware file
+
 );
 
-// custom middleware - logging in with a password; put in custom_middleware file
+server.use('/api/suppliers', supplierRouter);
+server.use('/api/items', itemRouter);
 
-// server.use((req, res, next) => {
-//     const pass = req.query.pass;
-//     if (pass === 'ferret') {
-//         next();
-//     } else {
-//         res.status(400).json({message: 'invalid password'});
-//     }
+
+// Initial test to see if server is working
+// server.get('/entrance', (req, res) => {
+//     res.status(404).json({message: 'request received, welcome Will Ferret'});
 // });
 
-// route handlers - GET endpoint
+// 2 resources Lecture on Coffee Shop Inventory App
 
-server.get('/entrance', (req, res) => {
-    res.status(404).json({message: 'request received, welcome ferret'});
-});
+
 
 // listen
 server.listen(PORT, err => {
